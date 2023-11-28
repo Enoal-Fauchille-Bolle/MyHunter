@@ -8,6 +8,14 @@
         "stdarg.h": "c",
         "my_printf.h": "c",
         "stat.h": "c",
-        "myls.h": "c"
+        "myls.h": "c",
+        "renderwindow.h": "c",
+        "myhunter.h": "c",
+        "events.h": "c",
+        "framebuffer.h": "c",
+        "sprites.h": "c",
+        "clock.h": "c",
+        "crosshair.h": "c",
+        "chicken.h": "c"
     }
 }
