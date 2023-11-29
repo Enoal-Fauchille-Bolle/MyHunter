@@ -16,6 +16,9 @@
         "sprites.h": "c",
         "clock.h": "c",
         "crosshair.h": "c",
-        "chicken.h": "c"
+        "chicken.h": "c",
+        "random": "c",
+        "limits": "c",
+        "algorithm": "c"
     }
 }

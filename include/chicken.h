@@ -10,10 +10,20 @@
 
     #include <SFML/Graphics.h>
 
-int show_chicken(sfRenderWindow *window, sfTexture *chicken_texture,
-    sfSprite *chicken_sprite, sfClock *clock);
-void chicken_manager(sfRenderWindow *window, sfClock *clock);
-void chicken(sfRenderWindow *window, sfClock *clock, sfIntRect *rect,
-    sfVector2f chicken_position);
+typedef struct chicken_s {
+    sfRenderWindow *window;
+    sfTexture *texture;
+    sfSprite *sprite;
+    sfClock *clock;
+    sfIntRect rect;
+    sfVector2f position;
+    int direction; // 1: left, 2: right
+    int speed;
+} chicken_t;
+
+chicken_t *chicken_create(sfRenderWindow *window);
+void chicken_spawn(chicken_t *chicken);
+void chicken_update(chicken_t *chicken);
+void chicken_destroy(chicken_t *chicken);
 
 #endif /* !CHICKEN_H_ */

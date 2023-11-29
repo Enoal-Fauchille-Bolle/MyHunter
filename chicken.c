@@ -10,92 +10,57 @@
 #include "chicken.h"
 #include "sprites.h"
 #include "utils.h"
+#include <stdlib.h>
 #include <SFML/Graphics/RenderWindow.h>
 #include <SFML/System/Clock.h>
 
-int show_chicken(sfRenderWindow *window, sfTexture *chicken_texture,
-    sfSprite *chicken_sprite, sfClock *clock)
+chicken_t *chicken_create(sfRenderWindow *window)
 {
-    // float ms = sfClock_getElapsedTime(clock).microseconds / 1000;
-    sfIntRect rect = { 0, 0, 200, 150 };
+    chicken_t *chicken = malloc(sizeof(chicken_t));
 
-    if (!chicken_texture)
-        return 84;
-    chicken_sprite = sfSprite_create();
-    if (sfClock_getElapsedTime(clock).microseconds / 1000.0 > 200) {
-        move_rect(&rect, 200, 800);
-        my_printf("%d\n", rect.left);
-        sfClock_restart(clock);
-    }
-    chicken_texture = sfTexture_createFromFile("./resources/Chicken.png",
-        &rect);
-    sfSprite_setTexture(chicken_sprite, chicken_texture, sfTrue);
-    sfSprite_setPosition(chicken_sprite, (sfVector2f){ 1000, 500 });
-    sfRenderWindow_drawSprite(window, chicken_sprite, NULL);
-    return 0;
+    chicken -> window = window;
+    chicken -> texture = get_chicken_texture();
+    chicken -> sprite = sfSprite_create();
+    chicken -> clock = sfClock_create();
+    chicken -> rect = (sfIntRect){ 0, 0, 200, 150 };
+    chicken -> position = (sfVector2f){ 0, 0 };
+    return chicken;
 }
 
-int move_chicken(sfRenderWindow *window, sfTexture *chicken_texture,
-    sfSprite *chicken_sprite, sfClock *clock)
+void chicken_spawn(chicken_t *chicken)
 {
-    // float ms = sfClock_getElapsedTime(clock).microseconds / 1000;
-    sfIntRect rect = { 0, 0, 200, 150 };
+    int y = my_random(1, sfRenderWindow_getSize(chicken->window).y - 150);
 
-    if (!chicken_texture)
-        return 84;
-    chicken_sprite = sfSprite_create();
-    if (sfClock_getElapsedTime(clock).microseconds / 1000.0 > 200) {
-        move_rect(&rect, 200, 4);
-        sfClock_restart(clock);
-    }
-    chicken_texture = sfTexture_createFromFile("./resources/Chicken.png",
-        &rect);
-    sfSprite_setTexture(chicken_sprite, chicken_texture, sfTrue);
-    // sfSprite_setPosition(chicken_sprite, (sfVector2f){ 1000, 500 });
-    sfSprite_move(chicken_sprite, (sfVector2f){ 1, 1 });
-    sfRenderWindow_drawSprite(window, chicken_sprite, NULL);
-    return 0;
-}
-
-void create_chicken(sfRenderWindow *window)
-{
-    sfTexture* chicken_texture = get_chicken_texture();
-    sfSprite* chicken_sprite = sfSprite_create();
-    sfClock *clock_animation = sfClock_create();
-
-    show_chicken(window, chicken_texture, chicken_sprite, clock_animation);
-}
-
-void chicken_manager(sfRenderWindow *window, sfClock *clock)
-{
-    // create_chicken(window);
-    (void)window;
-    (void)clock;
-    // my_printf("b\n");
-
-    // create_chicken
-    if (sfClock_getElapsedTime(clock).microseconds / 1000.0 > 2000) {
-        my_printf("a\n");
-        sfClock_restart(clock);
+    chicken->direction = my_random(1, 2);
+    if (chicken->direction == 2) {
+        chicken->position = (sfVector2f)
+            { sfRenderWindow_getSize(chicken->window).x, y };
+    } else {
+        chicken->position = (sfVector2f){ -200, y };
     }
 }
 
-void chicken(sfRenderWindow *window, sfClock *clock, sfIntRect *rect,
-    sfVector2f chicken_position)
+void chicken_update(chicken_t *chicken)
 {
-    sfTexture* chicken_texture = get_chicken_texture();
-    sfSprite* chicken_sprite = sfSprite_create();
-
-    (void)clock;
-    chicken_texture = sfTexture_createFromFile("./resources/Chicken.png",
-        rect);
-    sfSprite_setTexture(chicken_sprite, chicken_texture, sfTrue);
-    sfSprite_setPosition(chicken_sprite, chicken_position);
-    sfRenderWindow_drawSprite(window, chicken_sprite, NULL);
-    if (sfClock_getElapsedTime(clock).microseconds / 1000.0 > 200) {
-        move_rect(rect, 200, 800);
-        sfClock_restart(clock);
+    chicken->texture = sfTexture_createFromFile("./resources/Chicken.png",
+        &chicken->rect);
+    sfSprite_setTexture(chicken->sprite, chicken->texture, sfTrue);
+    sfSprite_setPosition(chicken->sprite, chicken->position);
+    sfRenderWindow_drawSprite(chicken->window, chicken->sprite, NULL);
+    if (sfClock_getElapsedTime(chicken->clock).microseconds / 1000.0 > 200) {
+        move_rect(&chicken->rect, 200, 800);
+        sfClock_restart(chicken->clock);
     }
-    sfSprite_destroy(chicken_sprite);
-    sfTexture_destroy(chicken_texture);
+    if (chicken->direction == 1) {
+        chicken->position.x += 5;
+    } else {
+        chicken->position.x -= 5;
+    }
+}
+
+void chicken_destroy(chicken_t *chicken)
+{
+    sfSprite_destroy(chicken->sprite);
+    sfTexture_destroy(chicken->texture);
+    free(chicken);
 }

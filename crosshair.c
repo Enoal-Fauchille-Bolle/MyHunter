@@ -22,7 +22,8 @@ void crosshair(sfRenderWindow *window)
     crosshair_texture = sfTexture_createFromFile("./resources/Crosshair.png",
         NULL);
     sfSprite_setTexture(crosshair_sprite, crosshair_texture, sfTrue);
-    sfSprite_setPosition(crosshair_sprite, (sfVector2f){ position.x - 24, position.y - 24 });
+    sfSprite_setPosition(crosshair_sprite, (sfVector2f){ position.x - 24,
+        position.y - 24 });
     sfRenderWindow_drawSprite(window, crosshair_sprite, NULL);
     sfSprite_destroy(crosshair_sprite);
     sfTexture_destroy(crosshair_texture);

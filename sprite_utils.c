@@ -20,7 +20,6 @@ sfTexture *get_bg_texture(void)
 sfTexture *get_chicken_texture(void)
 {
     return sfTexture_createFromFile("./resources/Chicken.png",
-    // return sfTexture_createFromFile("./resources/ChickenTest.png",
         &(sfIntRect){ 0, 0, 800, 150 });
 }
 

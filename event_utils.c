@@ -24,6 +24,5 @@ void analyse_events(sfRenderWindow *window)
 
 void manage_mouse_click(sfMouseButtonEvent event)
 {
-    (void)event;
-    // my_printf("Mouse x=%d y=%d\n", event.x, event.y);
+    my_printf("Mouse x=%d y=%d\n", event.x, event.y);
 }
