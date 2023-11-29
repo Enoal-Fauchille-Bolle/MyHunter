@@ -10,7 +10,7 @@ SRC	=	myhunter.c	\
 		utils.c	\
 		event_utils.c	\
 		framebuffer_utils.c	\
-		sprite_utils.c	\
+		background.c	\
 		chicken.c	\
 		crosshair.c	\
 

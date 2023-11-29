@@ -10,7 +10,7 @@
 #include "myhunter.h"
 #include "utils.h"
 #include "events.h"
-#include "sprites.h"
+#include "background.h"
 #include "chicken.h"
 #include "crosshair.h"
 #include "framebuffer.h"
@@ -20,22 +20,21 @@
 
 static void game(sfRenderWindow* window)
 {
-    sfTexture* bg_texture = get_bg_texture();
-    sfSprite* bg_sprite = sfSprite_create();
+    background_t *background = background_create(window);
     chicken_t *chicken = chicken_create(window);
+    crosshair_t *crosshair = crosshair_create(window);
 
-    chicken_spawn(chicken);
     while (sfRenderWindow_isOpen(window)) {
-        analyse_events(window);
+        analyse_events(window, chicken, background);
         sfRenderWindow_clear(window, sfBlack);
-        show_background(window, bg_texture, bg_sprite);
-        chicken_update(chicken);
-        crosshair(window);
+        background_update(background);
+        chicken_update(chicken, background);
+        crosshair_update(crosshair, background);
         sfRenderWindow_display(window);
     }
-    sfSprite_destroy(bg_sprite);
-    sfTexture_destroy(bg_texture);
     chicken_destroy(chicken);
+    crosshair_destroy(crosshair);
+    background_destroy(background);
 }
 
 int game_instance(int width, int height)
@@ -48,7 +47,6 @@ int game_instance(int width, int height)
         return 84;
     sfRenderWindow_setFramerateLimit(window, 60);
     change_icon(window);
-    sfRenderWindow_setMouseCursorVisible(window, sfFalse);
     game(window);
     sfRenderWindow_destroy(window);
     return 0;

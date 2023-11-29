@@ -7,24 +7,42 @@
 
 #include "my.h"
 #include "my_printf.h"
-#include "chicken.h"
-#include "sprites.h"
+#include "crosshair.h"
+#include "background.h"
 #include "utils.h"
+#include <stdlib.h>
 #include <SFML/Graphics/RenderWindow.h>
 #include <SFML/System/Clock.h>
 
-void crosshair(sfRenderWindow *window)
+crosshair_t *crosshair_create(sfRenderWindow *window)
 {
-    sfTexture* crosshair_texture = get_chicken_texture();
-    sfSprite* crosshair_sprite = sfSprite_create();
-    sfVector2i position = sfMouse_getPositionRenderWindow(window);
+    crosshair_t *crosshair = malloc(sizeof(crosshair_t));
 
-    crosshair_texture = sfTexture_createFromFile("./resources/Crosshair.png",
+    crosshair->window = window;
+    crosshair->texture = sfTexture_createFromFile("./resources/Crosshair.png",
         NULL);
-    sfSprite_setTexture(crosshair_sprite, crosshair_texture, sfTrue);
-    sfSprite_setPosition(crosshair_sprite, (sfVector2f){ position.x - 24,
-        position.y - 24 });
-    sfRenderWindow_drawSprite(window, crosshair_sprite, NULL);
-    sfSprite_destroy(crosshair_sprite);
-    sfTexture_destroy(crosshair_texture);
+    crosshair->sprite = sfSprite_create();
+    return crosshair;
+}
+
+void crosshair_update(crosshair_t *crosshair, background_t *background)
+{
+    sfVector2i position = sfMouse_getPositionRenderWindow(crosshair->window);
+
+    if (background->state != 2) {
+        sfRenderWindow_setMouseCursorVisible(background->window, sfTrue);
+        return;
+    }
+    sfRenderWindow_setMouseCursorVisible(background->window, sfFalse);
+    sfSprite_setTexture(crosshair->sprite, crosshair->texture, sfTrue);
+    sfSprite_setPosition(crosshair->sprite, (sfVector2f){ position.x - 33,
+        position.y - 33 });
+    sfRenderWindow_drawSprite(crosshair->window, crosshair->sprite, NULL);
+}
+
+void crosshair_destroy(crosshair_t *crosshair)
+{
+    sfSprite_destroy(crosshair->sprite);
+    sfTexture_destroy(crosshair->texture);
+    free(crosshair);
 }

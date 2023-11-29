@@ -8,9 +8,10 @@
 #ifndef EVENTS_H_
     #define EVENTS_H_
 
+    #include "chicken.h"
     #include <SFML/Graphics.h>
 
-void analyse_events(sfRenderWindow *window);
-void manage_mouse_click(sfMouseButtonEvent event);
+void analyse_events(sfRenderWindow *window, chicken_t *chicken,
+    background_t *background);
 
 #endif /* EVENTS_H_ */
