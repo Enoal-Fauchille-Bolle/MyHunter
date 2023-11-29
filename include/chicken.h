@@ -14,7 +14,9 @@ typedef struct chicken_s {
     sfRenderWindow *window;
     sfTexture *texture;
     sfSprite *sprite;
-    sfClock *clock;
+    sfClock *clock_animation;
+    sfClock *clock_movement;
+    sfClock *clock_speed;
     sfIntRect rect;
     sfVector2f position;
     int direction; // 1: left, 2: right

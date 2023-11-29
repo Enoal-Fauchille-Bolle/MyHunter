@@ -19,6 +19,7 @@
         "chicken.h": "c",
         "random": "c",
         "limits": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "graphics.h": "c"
     }
 }
