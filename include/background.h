@@ -9,6 +9,7 @@
     #define BACKGROUND_H_
 
     #include <SFML/Graphics.h>
+    #include <SFML/Audio.h>
 
 typedef struct background_s {
     sfRenderWindow *window;
@@ -19,6 +20,8 @@ typedef struct background_s {
     sfSprite *game_sprite;
     sfTexture *gameover_texture;
     sfSprite *gameover_sprite;
+    sfMusic *music;
+    sfSound *sound_click;
 } background_t;
 
 background_t *background_create(sfRenderWindow *window);

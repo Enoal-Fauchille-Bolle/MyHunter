@@ -12,7 +12,48 @@
 #include "utils.h"
 #include <stdlib.h>
 #include <SFML/Graphics/RenderWindow.h>
+#include <SFML/Audio.h>
 #include <SFML/System/Clock.h>
+
+static void chicken_create_clocks(chicken_t *chicken)
+{
+    chicken -> clock_animation = sfClock_create();
+    chicken -> clock_movement = sfClock_create();
+    chicken -> clock_speed = sfClock_create();
+    chicken -> clock_gameover = sfClock_create();
+    chicken -> clock_sound = sfClock_create();
+}
+
+static void chicken_setup_sounds(chicken_t *chicken)
+{
+    sfSound_setBuffer(chicken->sound_idle1,
+        sfSoundBuffer_createFromFile("./resources/ChickenIdle1.ogg"));
+    sfSound_setVolume(chicken->sound_idle1, 50);
+    sfSound_setBuffer(chicken->sound_idle2,
+        sfSoundBuffer_createFromFile("./resources/ChickenIdle2.ogg"));
+    sfSound_setVolume(chicken->sound_idle2, 50);
+    sfSound_setBuffer(chicken->sound_idle3,
+        sfSoundBuffer_createFromFile("./resources/ChickenIdle3.ogg"));
+    sfSound_setVolume(chicken->sound_idle3, 50);
+    sfSound_setBuffer(chicken->sound_hurt1,
+        sfSoundBuffer_createFromFile("./resources/ChickenHurt1.ogg"));
+    sfSound_setVolume(chicken->sound_hurt1, 50);
+    sfSound_setBuffer(chicken->sound_hurt2,
+        sfSoundBuffer_createFromFile("./resources/ChickenHurt2.ogg"));
+    sfSound_setVolume(chicken->sound_hurt2, 50);
+    sfSound_setBuffer(chicken->sound_gameover,
+        sfSoundBuffer_createFromFile("./resources/ChickenPlop.ogg"));
+}
+
+static void chicken_create_sounds(chicken_t *chicken)
+{
+    chicken -> sound_idle1 = sfSound_create();
+    chicken -> sound_idle2 = sfSound_create();
+    chicken -> sound_idle3 = sfSound_create();
+    chicken -> sound_hurt1 = sfSound_create();
+    chicken -> sound_hurt2 = sfSound_create();
+    chicken -> sound_gameover = sfSound_create();
+}
 
 chicken_t *chicken_create(sfRenderWindow *window)
 {
@@ -22,10 +63,7 @@ chicken_t *chicken_create(sfRenderWindow *window)
     chicken -> texture = sfTexture_createFromFile("./resources/Chicken.png",
         &(sfIntRect){ 0, 0, 800, 150 });
     chicken -> sprite = sfSprite_create();
-    chicken -> clock_animation = sfClock_create();
-    chicken -> clock_movement = sfClock_create();
-    chicken -> clock_speed = sfClock_create();
-    chicken -> clock_gameover = sfClock_create();
+    chicken_create_clocks(chicken);
     chicken -> rect = (sfIntRect){ 0, 0, 200, 150 };
     chicken -> position = (sfVector2f){ 0, 0 };
     chicken -> speed = 6.0;
@@ -33,6 +71,8 @@ chicken_t *chicken_create(sfRenderWindow *window)
     chicken -> font =
         sfFont_createFromFile("./resources/Minecraftia-Regular.ttf");
     chicken -> score = 0;
+    chicken_create_sounds(chicken);
+    chicken_setup_sounds(chicken);
     return chicken;
 }
 
@@ -49,86 +89,14 @@ void chicken_spawn(chicken_t *chicken)
     }
 }
 
-static void chicken_update_movement(chicken_t *chicken,
-    background_t *background)
+void chicken_destroy_sounds(chicken_t *chicken)
 {
-    if (sfClock_getElapsedTime(chicken->clock_movement).microseconds /
-        1000.0 > 10) {
-        if (chicken->direction == 1) {
-            chicken->position.x += chicken->speed;
-            sfSprite_setScale(chicken->sprite, (sfVector2f){ 1, 1 });
-        } else {
-            chicken->position.x -= chicken->speed;
-            sfSprite_setScale(chicken->sprite, (sfVector2f){ -1, 1 });
-        }
-        sfClock_restart(chicken->clock_movement);
-    }
-    if ((chicken->direction == 1 &&
-        chicken->position.x > sfRenderWindow_getSize(chicken->window).x) ||
-        (chicken->direction == 2 &&
-        chicken->position.x < 0)) {
-        background->state = 3;
-        sfClock_restart(chicken->clock_gameover);
-    }
-}
-
-static void chicken_update_animation(chicken_t *chicken)
-{
-    if (sfClock_getElapsedTime(chicken->clock_animation).microseconds /
-        1000.0 > 200) {
-        move_rect(&chicken->rect, 200, 800);
-        sfClock_restart(chicken->clock_animation);
-    }
-}
-
-static void chicken_update_speed(chicken_t *chicken)
-{
-    if (sfClock_getElapsedTime(chicken->clock_speed).microseconds /
-        1000.0 > 5000) {
-        chicken->speed += 1.0;
-        sfClock_restart(chicken->clock_speed);
-    }
-}
-
-static void chicken_update_gameover(chicken_t *chicken)
-{
-    sfText_setString(chicken->text_score, my_int_to_str(chicken->score));
-    sfText_setCharacterSize(chicken->text_score, 45);
-    sfText_setFont(chicken->text_score, chicken->font);
-    sfText_setFillColor(chicken->text_score, sfYellow);
-    sfText_setPosition(chicken->text_score, (sfVector2f){ 969, 486 });
-    sfRenderWindow_drawText(chicken->window, chicken->text_score, NULL);
-}
-
-static void chicken_update_score(chicken_t *chicken)
-{
-    sfText_setString(chicken->text_score, my_strconcat("Score: ",
-        my_int_to_str(chicken->score)));
-    sfText_setCharacterSize(chicken->text_score, 45);
-    sfText_setFont(chicken->text_score, chicken->font);
-    sfText_setFillColor(chicken->text_score, sfYellow);
-    sfText_setPosition(chicken->text_score, (sfVector2f){ 10, 30 });
-    sfRenderWindow_drawText(chicken->window, chicken->text_score, NULL);
-}
-
-void chicken_update(chicken_t *chicken, background_t *background)
-{
-    if (background->state == 3)
-        return chicken_update_gameover(chicken);
-    if (background->state != 2) {
-        chicken->score = 0;
-        chicken->speed = 6.0;
-        return;
-    }
-    chicken->texture = sfTexture_createFromFile("./resources/Chicken.png",
-        &chicken->rect);
-    sfSprite_setTexture(chicken->sprite, chicken->texture, sfTrue);
-    sfSprite_setPosition(chicken->sprite, chicken->position);
-    sfRenderWindow_drawSprite(chicken->window, chicken->sprite, NULL);
-    chicken_update_speed(chicken);
-    chicken_update_animation(chicken);
-    chicken_update_movement(chicken, background);
-    chicken_update_score(chicken);
+    sfSound_destroy(chicken->sound_idle1);
+    sfSound_destroy(chicken->sound_idle2);
+    sfSound_destroy(chicken->sound_idle3);
+    sfSound_destroy(chicken->sound_hurt1);
+    sfSound_destroy(chicken->sound_hurt2);
+    sfSound_destroy(chicken->sound_gameover);
 }
 
 void chicken_destroy(chicken_t *chicken)
@@ -139,5 +107,7 @@ void chicken_destroy(chicken_t *chicken)
     sfClock_destroy(chicken->clock_movement);
     sfClock_destroy(chicken->clock_speed);
     sfClock_destroy(chicken->clock_gameover);
+    sfClock_destroy(chicken->clock_sound);
+    chicken_destroy_sounds(chicken);
     free(chicken);
 }

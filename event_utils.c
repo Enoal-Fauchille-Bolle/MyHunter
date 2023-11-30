@@ -8,8 +8,19 @@
 #include "my.h"
 #include "my_printf.h"
 #include "events.h"
+#include "utils.h"
 #include "chicken.h"
 #include <SFML/Graphics/RenderWindow.h>
+
+static void chicken_clicked(chicken_t *chicken)
+{
+    chicken_spawn(chicken);
+    chicken->score += 1;
+    if (my_random(1, 2) == 1)
+        sfSound_play(chicken->sound_hurt1);
+    else
+        sfSound_play(chicken->sound_hurt2);
+}
 
 static void chicken_click(sfMouseButtonEvent event, chicken_t *chicken)
 {
@@ -18,16 +29,14 @@ static void chicken_click(sfMouseButtonEvent event, chicken_t *chicken)
             event.x < chicken->position.x + 175.0 &&
             chicken->position.y < event.y &&
             event.y < chicken->position.y + 150.0) {
-            chicken_spawn(chicken);
-            chicken->score += 1;
+            chicken_clicked(chicken);
         }
     } else {
         if (chicken->position.x - 175.0 < event.x &&
             event.x < chicken->position.x - 25.0 &&
             chicken->position.y < event.y &&
             event.y < chicken->position.y + 150.0) {
-            chicken_spawn(chicken);
-            chicken->score += 1;
+            chicken_clicked(chicken);
         }
     }
 }
@@ -40,6 +49,7 @@ static void manage_mouse_click(sfMouseButtonEvent event, chicken_t *chicken,
     if (background->state == 1) {
         background->state = 2;
         chicken_spawn(chicken);
+        sfSound_play(background->sound_click);
     }
     if (background->state == 2) {
         chicken_click(event, chicken);
@@ -48,6 +58,7 @@ static void manage_mouse_click(sfMouseButtonEvent event, chicken_t *chicken,
         sfClock_getElapsedTime(chicken->clock_gameover).microseconds /
         1000.0 > 1000) {
         background->state = 1;
+        sfSound_play(background->sound_click);
     }
 }
 
@@ -56,10 +67,13 @@ static void manage_keys(sfKeyEvent event, background_t *background)
     if (event.code != sfKeyEscape)
         return;
     if (background->state == 1) {
+        sfSound_play(background->sound_click);
+        sfSleep((sfTime){ 100 * 1000 });
         sfRenderWindow_close(background->window);
     }
     if (background->state == 2) {
         background->state = 1;
+        sfSound_play(background->sound_click);
     }
 }
 

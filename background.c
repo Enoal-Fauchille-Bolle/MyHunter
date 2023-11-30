@@ -14,6 +14,22 @@
 #include <SFML/Graphics/RenderWindow.h>
 #include <SFML/System/Clock.h>
 
+static void background_create_sprites(background_t *background)
+{
+    background->menu_texture =
+        sfTexture_createFromFile("./resources/Menu.png",
+        &(sfIntRect){ 0, 0, 1920, 1080 });
+    background->game_texture =
+        sfTexture_createFromFile("./resources/Background.png",
+        &(sfIntRect){ 0, 0, 1920, 1080 });
+    background->gameover_texture =
+        sfTexture_createFromFile("./resources/Gameover.png",
+        &(sfIntRect){ 0, 0, 1920, 1080 });
+    background->menu_sprite = sfSprite_create();
+    background->game_sprite = sfSprite_create();
+    background->gameover_sprite = sfSprite_create();
+}
+
 static void background_create_textures(background_t *background)
 {
     sfSprite_setTexture(background->menu_sprite,
@@ -30,19 +46,14 @@ background_t *background_create(sfRenderWindow *window)
 
     background->window = window;
     background->state = 1;
-    background->menu_texture =
-        sfTexture_createFromFile("./resources/Menu2.png",
-        &(sfIntRect){ 0, 0, 1920, 1080 });
-    background->game_texture =
-        sfTexture_createFromFile("./resources/Background.png",
-        &(sfIntRect){ 0, 0, 1920, 1080 });
-    background->gameover_texture =
-        sfTexture_createFromFile("./resources/Gameover2.png",
-        &(sfIntRect){ 0, 0, 1920, 1080 });
-    background->menu_sprite = sfSprite_create();
-    background->game_sprite = sfSprite_create();
-    background->gameover_sprite = sfSprite_create();
+    background_create_sprites(background);
     background_create_textures(background);
+    background->music = sfMusic_createFromFile("./resources/Music.ogg");
+    sfMusic_play(background->music);
+    sfMusic_setVolume(background->music, 20);
+    background->sound_click = sfSound_create();
+    sfSound_setBuffer(background->sound_click,
+        sfSoundBuffer_createFromFile("./resources/MinecraftClick.ogg"));
     return background;
 }
 
@@ -70,5 +81,7 @@ void background_destroy(background_t *background)
     sfTexture_destroy(background->menu_texture);
     sfTexture_destroy(background->game_texture);
     sfTexture_destroy(background->gameover_texture);
+    sfMusic_destroy(background->music);
+    sfSound_destroy(background->sound_click);
     free(background);
 }

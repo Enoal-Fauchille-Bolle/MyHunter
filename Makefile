@@ -12,6 +12,7 @@ SRC	=	myhunter.c	\
 		framebuffer_utils.c	\
 		background.c	\
 		chicken.c	\
+		chickenupdate.c	\
 		crosshair.c	\
 
 NAME	=	my_hunter
@@ -28,7 +29,7 @@ $(NAME):	$(OBJ)
 	make -C lib/linked_list/
 	gcc -o $(NAME) $(OBJ) -L./lib/my -lmy -L./lib/my_printf	\
 	-lmy_printf -L./lib/linked_list -llinked_list -l csfml-graphics	\
-	-l csfml-system
+	-l csfml-system -l csfml-audio
 
 clean:
 	rm -f $(OBJ)
