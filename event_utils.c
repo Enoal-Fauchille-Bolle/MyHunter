@@ -19,6 +19,7 @@ static void chicken_click(sfMouseButtonEvent event, chicken_t *chicken)
             chicken->position.y < event.y &&
             event.y < chicken->position.y + 150.0) {
             chicken_spawn(chicken);
+            chicken->score += 1;
         }
     } else {
         if (chicken->position.x - 175.0 < event.x &&
@@ -26,6 +27,7 @@ static void chicken_click(sfMouseButtonEvent event, chicken_t *chicken)
             chicken->position.y < event.y &&
             event.y < chicken->position.y + 150.0) {
             chicken_spawn(chicken);
+            chicken->score += 1;
         }
     }
 }
@@ -42,7 +44,9 @@ static void manage_mouse_click(sfMouseButtonEvent event, chicken_t *chicken,
     if (background->state == 2) {
         chicken_click(event, chicken);
     }
-    if (background->state == 3) {
+    if (background->state == 3 &&
+        sfClock_getElapsedTime(chicken->clock_gameover).microseconds /
+        1000.0 > 1000) {
         background->state = 1;
     }
 }

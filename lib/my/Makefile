@@ -5,7 +5,7 @@
 ## day10
 ##
 
-SRC	=	exponent.c  \
+SRC	=	my_exponent.c  \
 		my_compute_power_rec.c	\
 		my_compute_square_root.c    \
 		my_find_prime_sup.c	\
@@ -41,6 +41,9 @@ SRC	=	exponent.c  \
 		my_left_strip.c	\
 		my_str_get_index.c	\
 		my_sort_str_array.c	\
+		my_int_to_str.c	\
+		check_malloc.c	\
+		my_strconcat.c	\
 
 OBJ	=	$(SRC:.c=.o)
 

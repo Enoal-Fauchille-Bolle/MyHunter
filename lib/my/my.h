@@ -35,7 +35,7 @@ char *my_strcat(char *, char const *);
 char *my_strncat(char *, char const *, int);
 char *my_strdup(char const *);
 char **my_str_to_word_array(char const *);
-int exponent(int, int);
+int my_exponent(int, int);
 int my_show_word_array(char *const *);
 char *my_slice(char const *, int, int);
 int my_str_include(char *, char);
@@ -44,5 +44,8 @@ char *my_left_strip(char *, char);
 char *my_right_strip(char *, char);
 int my_str_get_index(char *str, char c);
 void my_sort_str_array(char **array, int size);
+char *my_int_to_str(int number);
+void check_malloc(void *value);
+char *my_strconcat(char *a, char *b);
 
 #endif /* MY_H_ */

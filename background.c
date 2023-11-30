@@ -31,13 +31,13 @@ background_t *background_create(sfRenderWindow *window)
     background->window = window;
     background->state = 1;
     background->menu_texture =
-        sfTexture_createFromFile("./resources/Menu.png",
+        sfTexture_createFromFile("./resources/Menu2.png",
         &(sfIntRect){ 0, 0, 1920, 1080 });
     background->game_texture =
         sfTexture_createFromFile("./resources/Background.png",
         &(sfIntRect){ 0, 0, 1920, 1080 });
     background->gameover_texture =
-        sfTexture_createFromFile("./resources/Gameover.png",
+        sfTexture_createFromFile("./resources/Gameover2.png",
         &(sfIntRect){ 0, 0, 1920, 1080 });
     background->menu_sprite = sfSprite_create();
     background->game_sprite = sfSprite_create();

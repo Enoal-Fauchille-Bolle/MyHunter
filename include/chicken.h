@@ -18,10 +18,14 @@ typedef struct chicken_s {
     sfClock *clock_animation;
     sfClock *clock_movement;
     sfClock *clock_speed;
+    sfClock *clock_gameover;
     sfIntRect rect;
     sfVector2f position;
     int direction; // 1: left, 2: right
     float speed;
+    sfText *text_score;
+    sfFont *font;
+    int score;
 } chicken_t;
 
 chicken_t *chicken_create(sfRenderWindow *window);

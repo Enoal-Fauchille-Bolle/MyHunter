@@ -42,7 +42,8 @@ int game_instance(int width, int height)
     sfVideoMode mode = {width, height, 32};
     sfRenderWindow* window;
 
-    window = sfRenderWindow_create(mode, "MyHunter", sfResize | sfClose, NULL);
+    window = sfRenderWindow_create(mode, "Chicken Hunter",
+        sfResize | sfClose, NULL);
     if (!window)
         return 84;
     sfRenderWindow_setFramerateLimit(window, 60);

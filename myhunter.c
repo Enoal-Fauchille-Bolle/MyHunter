@@ -31,6 +31,17 @@ static int help_page(void)
     my_printf("USAGE\n");
     my_printf("    ./my_hunter [-h]\n\n");
     my_printf("DESCRIPTION\n");
+    my_printf("    A game where you have to shoot chickens to win\n");
+    my_printf("    If you let one pass, you lose.\n\n");
+    my_printf("CONTROLS\n");
+    my_printf("    Main Menu:\n");
+    my_printf("        Click to start game\n");
+    my_printf("        Escape to quit\n");
+    my_printf("    In game:\n");
+    my_printf("        Click to shoot\n");
+    my_printf("    Gameover:\n");
+    my_printf("        Click to go to Main Menu\n\n");
+    my_printf("Good Luck !!!\n");
     return 0;
 }
 
