@@ -85,7 +85,7 @@ void analyse_events(sfRenderWindow *window, chicken_t *chicken,
     while (sfRenderWindow_pollEvent(window, &event)) {
         if (event.type == sfEvtClosed)
             sfRenderWindow_close(window);
-        if (event.type == sfEvtMouseButtonReleased)
+        if (event.type == sfEvtMouseButtonPressed)
             manage_mouse_click(event.mouseButton, chicken, background);
         if (event.type == sfEvtKeyPressed)
             manage_keys(event.key, background);
