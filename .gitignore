@@ -8,5 +8,5 @@ a.out
 *.gcda
 *.gcno
 unit_tests
-main
-.vscode/settings.json
+my_hunter
+.vscode/
