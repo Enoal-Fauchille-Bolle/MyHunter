@@ -1,5 +1,13 @@
 # My Hunter
 
+![Language](https://img.shields.io/badge/Language-C-blue)
+![Library](https://img.shields.io/badge/Library-CSFML-green)
+![Build](https://img.shields.io/badge/Build-Makefile-orange)
+![Last Commit](https://img.shields.io/github/last-commit/Enoal-Fauchille-Bolle/MyHunter)
+![Repo Size](https://img.shields.io/github/repo-size/Enoal-Fauchille-Bolle/MyHunter)
+![License](https://img.shields.io/github/license/Enoal-Fauchille-Bolle/MyHunter)
+[![WakaTime](https://wakatime.com/badge/user/018bbded-63e4-4a01-bd5e-21d050739656/project/018bf821-c401-4f78-8508-234839f55788.svg)](https://wakatime.com/badge/user/018bbded-63e4-4a01-bd5e-21d050739656/project/018bf821-c401-4f78-8508-234839f55788)
+
 My Hunter is a retro duck hunt-inspired game developed in C using the CSFML library. In this game, you control a hunter whose goal is to shoot animated ducks moving across the screen.
 
 ## Features
